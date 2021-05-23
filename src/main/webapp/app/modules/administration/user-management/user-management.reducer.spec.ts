@@ -51,7 +51,7 @@ describe('User management reducer tests', () => {
 
   describe('Common', () => {
     it('should return the initial state', () => {
-      testInitialState(userManagement(undefined, {}));
+      testInitialState(userManagement(undefined, { type: '' }));
     });
   });
 
@@ -214,7 +214,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsersAsAdmin()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getUsersAsAdmin({})).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches FETCH_USERS_AS_ADMIN_PENDING and FETCH_USERS_AS_ADMIN_FULFILLED actions with pagination options', async () => {
       const expectedActions = [
@@ -226,7 +226,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsersAsAdmin(1, 20, 'id,desc')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store
+        .dispatch(getUsersAsAdmin({ page: 1, size: 20, sort: 'id,desc' }))
+        .then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {
@@ -239,7 +241,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsers()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(getUsers({})).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions with pagination options', async () => {
       const expectedActions = [
@@ -251,7 +253,9 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(getUsers(1, 20, 'id,desc')).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store
+        .dispatch(getUsers({ page: 1, size: 20, sort: 'id,desc' }))
+        .then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches FETCH_ROLES_PENDING and FETCH_ROLES_FULFILLED actions', async () => {
       const expectedActions = [
@@ -294,7 +298,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject,
         },
       ];
-      await store.dispatch(createUser()).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(createUser({})).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches UPDATE_USER_PENDING and UPDATE_USER_FULFILLED actions', async () => {
       const expectedActions = [

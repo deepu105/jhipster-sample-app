@@ -4,7 +4,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
 import { Translate, getUrlParameter } from 'react-jhipster';
 
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (

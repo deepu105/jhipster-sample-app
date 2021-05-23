@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 import { logout } from 'app/shared/reducers/authentication';
 
 export interface ILogoutProps extends StateProps, DispatchProps {

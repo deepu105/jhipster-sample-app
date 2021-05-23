@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 
 interface IOwnProps extends RouteProps {

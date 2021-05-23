@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Table, Row, Badge } from 'reactstrap';
 import { Translate, TextFormat, JhiPagination, JhiItemCount, getSortState } from 'react-jhipster';
@@ -9,17 +8,23 @@ import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
 import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 import { getUsersAsAdmin, updateUser } from './user-management.reducer';
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<any> {}
+export const UserManagement = (props: RouteComponentProps<any>) => {
+  const dispatch = useAppDispatch();
 
-export const UserManagement = (props: IUserManagementProps) => {
   const [pagination, setPagination] = useState(
     overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE, 'id'), props.location.search)
   );
 
   const getUsersFromProps = () => {
-    props.getUsersAsAdmin(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
+    dispatch(
+      getUsersAsAdmin({
+        page: pagination.activePage - 1,
+        size: pagination.itemsPerPage,
+        sort: `${pagination.sort},${pagination.order}`,
+      })
+    );
     const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
     if (props.location.search !== endURL) {
       props.history.push(`${props.location.pathname}${endURL}`);
@@ -63,12 +68,17 @@ export const UserManagement = (props: IUserManagementProps) => {
   };
 
   const toggleActive = user => () =>
-    props.updateUser({
-      ...user,
-      activated: !user.activated,
-    });
+    dispatch(
+      updateUser({
+        ...user,
+        activated: !user.activated,
+      })
+    );
 
-  const { users, account, match, totalItems, loading } = props;
+  const { match } = props;
+  const account = useAppSelector(state => state.authentication.account);
+  const { users, totalItems, loading } = useAppSelector(state => state.userManagement);
+
   return (
     <div>
       <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
@@ -193,7 +203,7 @@ export const UserManagement = (props: IUserManagementProps) => {
           ))}
         </tbody>
       </Table>
-      {props.totalItems ? (
+      {totalItems ? (
         <div className={users && users.length > 0 ? '' : 'd-none'}>
           <Row className="justify-content-center">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
@@ -204,7 +214,7 @@ export const UserManagement = (props: IUserManagementProps) => {
               onSelect={handlePagination}
               maxButtons={5}
               itemsPerPage={pagination.itemsPerPage}
-              totalItems={props.totalItems}
+              totalItems={totalItems}
             />
           </Row>
         </div>
@@ -215,16 +225,4 @@ export const UserManagement = (props: IUserManagementProps) => {
   );
 };
 
-const mapStateToProps = (storeState: IRootState) => ({
-  loading: storeState.userManagement.loading,
-  users: storeState.userManagement.users,
-  totalItems: storeState.userManagement.totalItems,
-  account: storeState.authentication.account,
-});
-
-const mapDispatchToProps = { getUsersAsAdmin, updateUser };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagement);
+export default UserManagement;

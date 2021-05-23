@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 import locale, { LocaleState } from './locale';
@@ -14,22 +13,7 @@ import settings, { SettingsState } from 'app/modules/account/settings/settings.r
 import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
-export interface IRootState {
-  readonly authentication: AuthenticationState;
-  readonly locale: LocaleState;
-  readonly applicationProfile: ApplicationProfileState;
-  readonly administration: AdministrationState;
-  readonly userManagement: UserManagementState;
-  readonly register: RegisterState;
-  readonly activate: ActivateState;
-  readonly passwordReset: PasswordResetState;
-  readonly password: PasswordState;
-  readonly settings: SettingsState;
-  /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
-  readonly loadingBar: any;
-}
-
-const rootReducer = combineReducers<IRootState>({
+const rootReducer = {
   authentication,
   locale,
   applicationProfile,
@@ -42,6 +26,6 @@ const rootReducer = combineReducers<IRootState>({
   settings,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
-});
+};
 
 export default rootReducer;

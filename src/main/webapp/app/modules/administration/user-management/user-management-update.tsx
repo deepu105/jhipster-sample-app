@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Label, Row, Col } from 'reactstrap';
 import { AvForm, AvGroup, AvInput, AvField, AvFeedback } from 'availity-reactstrap-validation';
@@ -8,22 +7,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { locales, languages } from 'app/config/translation';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
-import { IRootState } from 'app/shared/reducers';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-export interface IUserManagementUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
-
-export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
+export const UserManagementUpdate = (props: RouteComponentProps<{ login: string }>) => {
   const [isNew] = useState(!props.match.params || !props.match.params.login);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isNew) {
-      props.reset();
+      dispatch(reset());
     } else {
-      props.getUser(props.match.params.login);
+      dispatch(getUser(props.match.params.login));
     }
-    props.getRoles();
+    dispatch(getRoles());
     return () => {
-      props.reset();
+      dispatch(reset());
     };
   }, []);
 
@@ -33,15 +31,15 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
 
   const saveUser = (event, values) => {
     if (isNew) {
-      props.createUser(values);
+      dispatch(createUser(values));
     } else {
-      props.updateUser(values);
+      dispatch(updateUser(values));
     }
     handleClose();
   };
 
   const isInvalid = false;
-  const { user, loading, updating, roles } = props;
+  const { user, loading, updating, authorities } = useAppSelector(state => state.userManagement);
 
   return (
     <div>
@@ -179,7 +177,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                   <Translate contentKey="userManagement.profiles">Profiles</Translate>
                 </Label>
                 <AvInput type="select" className="form-control" name="authorities" value={user.authorities} multiple>
-                  {roles.map(role => (
+                  {authorities.map(role => (
                     <option value={role} key={role}>
                       {role}
                     </option>
@@ -207,16 +205,4 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
   );
 };
 
-const mapStateToProps = (storeState: IRootState) => ({
-  user: storeState.userManagement.user,
-  roles: storeState.userManagement.authorities,
-  loading: storeState.userManagement.loading,
-  updating: storeState.userManagement.updating,
-});
-
-const mapDispatchToProps = { getUser, getRoles, updateUser, createUser, reset };
-
-type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserManagementUpdate);
+export default UserManagementUpdate;

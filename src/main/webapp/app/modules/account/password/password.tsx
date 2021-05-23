@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Button } from 'reactstrap';
 
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
 import { savePassword, reset } from './password.reducer';

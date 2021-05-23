@@ -4,7 +4,7 @@ import { Translate } from 'react-jhipster';
 import { Table, Badge, Col, Row, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 import { systemHealth } from '../administration.reducer';
 import HealthModal from './health-modal';
 

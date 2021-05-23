@@ -4,7 +4,7 @@ import { Table, Input, Row, Col, Badge } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 
 import { getConfigurations, getEnv } from '../administration.reducer';
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 
 export interface IConfigurationPageProps extends StateProps, DispatchProps {}
 

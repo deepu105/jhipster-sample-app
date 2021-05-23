@@ -5,7 +5,7 @@ import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 
 import { locales, languages } from 'app/config/translation';
-import { IRootState } from 'app/shared/reducers';
+import { IRootState } from 'app/config/store';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
 
